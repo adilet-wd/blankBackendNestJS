@@ -52,4 +52,22 @@ export class PartnerService {
       },
     });
   }
+
+  async updatePartnerById(id: number, data: Partial<CreatePartnerDto>): Promise<PartnerModel> {
+    return this.prismaService.partner.update({
+      where: {
+        id: Number(id)
+      },
+      data,
+    });
+  }
+
+  async updatePartnerByBrandName(brand_name: string, data: Partial<CreatePartnerDto>): Promise<PartnerModel> {
+    return this.prismaService.partner.update({
+      where: {
+        brand_name: brand_name
+      },
+      data,
+    });
+  }
 }
