@@ -20,8 +20,8 @@ model Filter {
 }
 
 model Partner {
-  id               Int    @id @default(autoincrement())
-  brand_name       String @unique
+  id               Int       @id @default(autoincrement())
+  brand_name       String    @unique
   email            String
   address          String
   organization     String
@@ -34,4 +34,15 @@ model Partner {
   // logo             String
   // bg_image         String
   password         String
+  Product          Product[]
+}
+
+model Product {
+  id              Int     @id @default(autoincrement())
+  description     String
+  date            String
+  characteristics String
+  price           Int
+  owner           Partner @relation(fields: [owner_id], references: [id])
+  owner_id        Int
 }
