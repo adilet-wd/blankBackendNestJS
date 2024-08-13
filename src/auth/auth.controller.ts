@@ -1,7 +1,9 @@
-import { Body, Controller, HttpException, Post, UseGuards } from '@nestjs/common';
-import { LoginPartnerDto } from './dto/login-auth.dto';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
+import { Request } from 'express';
+import { JwtGuard } from './guards/jwt.guard';
+
 
 @Controller('auth')
 export class AuthController {
@@ -9,11 +11,15 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalGuard)
-  async loginPartner(@Body() partnerDto: LoginPartnerDto) {
-
-    const partner = await this.authService.validatePartner(partnerDto);
-    if (!partner) throw new HttpException('Пользователь не найден', 401);
-
-    return partner;
+  async loginPartner(@Req() req: Request) {
+    return req.user;
   }
+
+  @Get('status')
+  @UseGuards(JwtGuard)
+  async status(@Req() req: Request) {
+    // console.log(req.user);
+    return req.user;
+  }
+
 }
