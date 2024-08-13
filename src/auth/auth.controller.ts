@@ -3,9 +3,9 @@ import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
 import { Request } from 'express';
 import { JwtGuard } from './guards/jwt.guard';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags("Авторизация")
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
