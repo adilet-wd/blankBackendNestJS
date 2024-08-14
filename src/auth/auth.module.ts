@@ -15,7 +15,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       secret: 'city312adilet',
       signOptions: { expiresIn: '5m' }
     }),
-
   ],
   controllers: [AuthController],
   providers: [AuthService, PartnerService, PrismaService, LocalStrategy, JwtStrategy]

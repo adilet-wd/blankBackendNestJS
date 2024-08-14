@@ -106,7 +106,7 @@ export class PartnerService {
 
 
   // Обновление партнера по названию бренда
-  async updatePartnerByBrandName(brand_name: string, data: Partial<CreatePartnerDto>): Promise<PartnerModel> {
+  async updatePartnerByBrandName(brand_name: string, data: Partial<CreatePartnerDto>): Promise<PartnerModel>  {
     // Проверка на существование партнера с таким названием
     await this.getPartnerByBrandName({brand_name});
 

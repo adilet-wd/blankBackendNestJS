@@ -37,7 +37,6 @@ export class PartnerController {
   }
 
 
-
   @ApiOperation({summary: "Удаление партнера по названию бренда"})
   @Delete("/brand_name")
   deletePartnerByBrandName(@Body() partnerDto: GetPartnerDto){

@@ -38,37 +38,37 @@ model Partner {
 }
 
 model Product {
-  id                      Int                       @id @default(autoincrement())
-  description             String
-  date                    String
-  characteristics         String
-  price                   Int
-  owner                   Partner                   @relation(fields: [owner_id], references: [id])
-  owner_id                Int
-  Product_Characteristics Product_Characteristics[]
+  id                 Int                  @id @default(autoincrement())
+  description        String
+  date               String
+  attributes         String
+  price              Int
+  owner              Partner              @relation(fields: [owner_id], references: [id])
+  owner_id           Int
+  Product_Attributes Product_Attributes[]
 }
 
-model Characteristics {
-  id                      Int                       @id @default(autoincrement())
-  name                    String
-  Characteristics_Value   Characteristics_Value[]
-  Product_Characteristics Product_Characteristics[]
+model Attribute {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @unique
+  Attribute_Value    Attribute_Value[]
+  Product_Attributes Product_Attributes[]
 }
 
-model Characteristics_Value {
-  id                      Int                       @id @default(autoincrement())
-  value                   String
-  Characteristics         Characteristics           @relation(fields: [characteristics_id], references: [id])
-  characteristics_id      Int
-  Product_Characteristics Product_Characteristics[]
+model Attribute_Value {
+  id                 Int                  @id @default(autoincrement())
+  value              String
+  attributes         Attribute            @relation(fields: [attribute_id], references: [id])
+  attribute_id       Int
+  Product_Attributes Product_Attributes[]
 }
 
-model Product_Characteristics {
-  id                 Int                   @id @default(autoincrement())
-  product            Product               @relation(fields: [product_id], references: [id])
-  product_id         Int
-  characteristics    Characteristics       @relation(fields: [characteristics_id], references: [id])
-  characteristics_id Int
-  value              Characteristics_Value @relation(fields: [value_id], references: [id])
-  value_id           Int
+model Product_Attributes {
+  id           Int             @id @default(autoincrement())
+  product      Product         @relation(fields: [product_id], references: [id])
+  product_id   Int
+  attributes   Attribute       @relation(fields: [attribute_id], references: [id])
+  attribute_id Int
+  value        Attribute_Value @relation(fields: [value_id], references: [id])
+  value_id     Int
 }
