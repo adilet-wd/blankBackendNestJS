@@ -48,9 +48,15 @@ export class PartnerService {
 
   // Создание партнера по дто
   async createPartner(data: CreatePartnerDto): Promise<PartnerModel> {
+
     // Проверка на существование партнера с таким названием
-    const partner = await this.getPartnerByBrandName({brand_name: data.brand_name});
-    if(partner) throw new HttpException('Партнер с таким названием уже существует', 200);
+    const partner = await this.prismaService.partner.findUnique({
+      where: {
+        brand_name: data.brand_name
+      }
+    });
+    if(partner) throw new HttpException('Партнер с таким названием уже существует', 400);
+
 
     return this.prismaService.partner.create({
       data,
@@ -62,8 +68,7 @@ export class PartnerService {
   // Удаление партнера по id
   async deletePartnerById(id: number): Promise<PartnerModel> {
     // Проверка на существование партнера с таким id
-    const partner = await this.getPartnerById(id);
-    if(!partner) throw new HttpException('Партнер с таким id не найден', 404);
+    await this.getPartnerById(id);
 
     return this.prismaService.partner.delete({
       where: {
@@ -76,8 +81,7 @@ export class PartnerService {
   // Удаление партнера по названию бренда
   async deletePartnerByBrandName(partnerDto: GetPartnerDto): Promise<PartnerModel> {
     // Проверка на существование партнера с таким названием
-    const partner = await this.getPartnerByBrandName(partnerDto);
-    if(!partner) throw new HttpException('Партнер с таким названием не найден', 404);
+    await this.getPartnerByBrandName(partnerDto);
 
     return this.prismaService.partner.delete({
       where: {
@@ -90,8 +94,7 @@ export class PartnerService {
   // Обновление партнера по id
   async updatePartnerById(id: number, data: Partial<CreatePartnerDto>): Promise<PartnerModel> {
     // Проверка на существование партнера с таким id
-    const partner = await this.getPartnerById(id);
-    if(!partner) throw new HttpException('Партнер с таким id не найден', 404);
+    await this.getPartnerById(id);
 
     return this.prismaService.partner.update({
       where: {
@@ -105,8 +108,7 @@ export class PartnerService {
   // Обновление партнера по названию бренда
   async updatePartnerByBrandName(brand_name: string, data: Partial<CreatePartnerDto>): Promise<PartnerModel> {
     // Проверка на существование партнера с таким названием
-    const partner = await this.getPartnerByBrandName({brand_name});
-    if(!partner) throw new HttpException('Партнер с таким названием не найден', 404);
+    await this.getPartnerByBrandName({brand_name});
 
     return this.prismaService.partner.update({
       where: {
