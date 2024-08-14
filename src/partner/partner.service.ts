@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreatePartnerDto } from './dto/create-partner.dto';
 import { PartnerModel } from './entities/partner.model';
 import { PrismaService } from '../prisma.service';
@@ -9,7 +9,48 @@ export class PartnerService {
 
   constructor( private prismaService: PrismaService) {}
 
+
+  // Получение всех партнеров
+  async getAllPartners() : Promise<PartnerModel[]> {
+    return this.prismaService.partner.findMany();
+  }
+
+
+  // Получение партнера по id
+  async getPartnerById(id: number) : Promise<PartnerModel> {
+    // Проверка на существование партнера с таким id
+    const partner = await this.prismaService.partner.findUnique({
+      where: {
+        id: Number(id)
+      }
+    });
+
+    if(!partner) throw new HttpException('Партнер с таким id не найден', 404);
+
+    return partner;
+  }
+
+
+  // Получение партнера по названию бренда
+  async getPartnerByBrandName(partnerDto: GetPartnerDto) : Promise<PartnerModel> {
+    // Проверка на существование партнера с таким названием
+    const partner = await this.prismaService.partner.findUnique({
+      where: {
+        brand_name: partnerDto.brand_name
+      }
+    });
+
+    if(!partner) throw new HttpException('Партнер с таким названием не найден', 404);
+
+    return partner;
+  }
+
+
+  // Создание партнера по дто
   async createPartner(data: CreatePartnerDto): Promise<PartnerModel> {
+    // Проверка на существование партнера с таким названием
+    const partner = await this.getPartnerByBrandName({brand_name: data.brand_name});
+    if(partner) throw new HttpException('Партнер с таким названием уже существует', 200);
 
     return this.prismaService.partner.create({
       data,
@@ -17,27 +58,13 @@ export class PartnerService {
 
   }
 
-  async getAllPartners() : Promise<PartnerModel[]> {
-    return this.prismaService.partner.findMany();
-  }
 
-  async getPartnerById(id: number) : Promise<PartnerModel> {
-    return this.prismaService.partner.findUnique({
-      where: {
-        id: Number(id)
-      }
-    });
-  }
-
-  async getPartnerByBrandName(partnerDto: GetPartnerDto) : Promise<PartnerModel> {
-    return this.prismaService.partner.findUnique({
-      where: {
-        brand_name: partnerDto.brand_name
-      }
-    });
-  }
-
+  // Удаление партнера по id
   async deletePartnerById(id: number): Promise<PartnerModel> {
+    // Проверка на существование партнера с таким id
+    const partner = await this.getPartnerById(id);
+    if(!partner) throw new HttpException('Партнер с таким id не найден', 404);
+
     return this.prismaService.partner.delete({
       where: {
         id: Number(id)
@@ -45,7 +72,13 @@ export class PartnerService {
     });
   }
 
+
+  // Удаление партнера по названию бренда
   async deletePartnerByBrandName(partnerDto: GetPartnerDto): Promise<PartnerModel> {
+    // Проверка на существование партнера с таким названием
+    const partner = await this.getPartnerByBrandName(partnerDto);
+    if(!partner) throw new HttpException('Партнер с таким названием не найден', 404);
+
     return this.prismaService.partner.delete({
       where: {
           brand_name: partnerDto.brand_name
@@ -53,7 +86,13 @@ export class PartnerService {
     });
   }
 
+
+  // Обновление партнера по id
   async updatePartnerById(id: number, data: Partial<CreatePartnerDto>): Promise<PartnerModel> {
+    // Проверка на существование партнера с таким id
+    const partner = await this.getPartnerById(id);
+    if(!partner) throw new HttpException('Партнер с таким id не найден', 404);
+
     return this.prismaService.partner.update({
       where: {
         id: Number(id)
@@ -62,7 +101,13 @@ export class PartnerService {
     });
   }
 
+
+  // Обновление партнера по названию бренда
   async updatePartnerByBrandName(brand_name: string, data: Partial<CreatePartnerDto>): Promise<PartnerModel> {
+    // Проверка на существование партнера с таким названием
+    const partner = await this.getPartnerByBrandName({brand_name});
+    if(!partner) throw new HttpException('Партнер с таким названием не найден', 404);
+
     return this.prismaService.partner.update({
       where: {
         brand_name: brand_name

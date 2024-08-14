@@ -6,7 +6,7 @@ export class PartnerModel {
   organization: string;
   inn: string;
   phone_number: string;
-  socials: string;
+socials: string;
   schedule: string;
   type_of_activity: string;
   description: string;
