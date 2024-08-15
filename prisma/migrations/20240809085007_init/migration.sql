@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Partner" ALTER COLUMN "inn" SET DATA TYPE TEXT,
-ALTER COLUMN "phone_number" SET DATA TYPE TEXT;

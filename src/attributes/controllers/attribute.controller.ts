@@ -1,17 +1,18 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { CreateAttributeDto } from './dto/create-attribute.dto';
-import { AttributeService } from './attribute.service';
+import { CreateAttributeDto } from '../dto/create-attribute.dto';
+import { AttributeService } from '../services/attribute.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { GetAttributeByNameDto } from './dto/get-attribute-byName.dto';
+import { GetAttributeByNameDto } from '../dto/get-attribute-byName.dto';
 
 @ApiTags("Характеристики")
-@Controller('attributes')
+@Controller('attribute')
 export class AttributeController {
   constructor(private attributeService: AttributeService) {
   }
 
+
   @ApiOperation({summary: "Создание характеристик"})
-  @Post()
+  @Post("/")
   async createAttribute(@Body() attributeDto: CreateAttributeDto){
     return this.attributeService.createAttribute(attributeDto);
   }
@@ -57,4 +58,5 @@ export class AttributeController {
   async updateAttributeById(@Param("id")id:number, @Body() attributeDto: Partial<CreateAttributeDto>) {
     return this.attributeService.updateAttributeById(id, attributeDto);
   }
+
 }

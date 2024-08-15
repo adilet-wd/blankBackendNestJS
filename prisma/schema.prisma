@@ -45,22 +45,24 @@ model Product {
   price              Int
   owner              Partner              @relation(fields: [owner_id], references: [id])
   owner_id           Int
-  Product_Attributes Product_Attributes[]
+  product_Attributes Product_Attributes[]
 }
 
 model Attribute {
   id                 Int                  @id @default(autoincrement())
   name               String               @unique
-  Attribute_Value    Attribute_Value[]
-  Product_Attributes Product_Attributes[]
+  attribute_Value    Attribute_Value[]
+  product_Attributes Product_Attributes[]
 }
 
 model Attribute_Value {
   id                 Int                  @id @default(autoincrement())
   value              String
-  attributes         Attribute            @relation(fields: [attribute_id], references: [id])
+  attribute          Attribute            @relation(fields: [attribute_id], references: [id])
   attribute_id       Int
-  Product_Attributes Product_Attributes[]
+  product_Attributes Product_Attributes[]
+
+  @@unique([attribute_id, value])
 }
 
 model Product_Attributes {

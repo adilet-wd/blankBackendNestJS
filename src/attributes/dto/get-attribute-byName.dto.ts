@@ -5,5 +5,5 @@ export class GetAttributeByNameDto {
 
   @ApiProperty({ example: "Цвет", description: "Название атрибута" })
   @IsString({ message: "Должно быть строкой" })
-  name: string;
+  readonly name: string;
 }
