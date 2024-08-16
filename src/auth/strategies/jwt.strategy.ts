@@ -1,6 +1,6 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 
 @Injectable()
@@ -13,10 +13,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: any) {
-    // const {brand_name, id} = payload;
-    // console.log(`brand_name: ${brand_name}, id: ${id}`);
-    return payload;
+  validate(payload) {
+    // Проверка на наличие роли в токене и является ли токен accessToken
+    if (payload.type != "accessToken" || !payload.role) {
+
+      throw new UnauthorizedException('Invalid accessToken payload');
+    }
+    return payload
   }
 
 }

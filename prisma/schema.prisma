@@ -31,6 +31,7 @@ model Partner {
   schedule         String
   type_of_activity String
   description      String
+  role             String    @default("PARTNER")
   // logo             String
   // bg_image         String
   password         String
@@ -40,8 +41,8 @@ model Partner {
 model Product {
   id                 Int                  @id @default(autoincrement())
   description        String
-  date               String
-  attributes         String
+  pulbication_date   String
+  expiration_date    String
   price              Int
   owner              Partner              @relation(fields: [owner_id], references: [id])
   owner_id           Int
@@ -69,7 +70,7 @@ model Product_Attributes {
   id           Int             @id @default(autoincrement())
   product      Product         @relation(fields: [product_id], references: [id])
   product_id   Int
-  attributes   Attribute       @relation(fields: [attribute_id], references: [id])
+  attribute    Attribute       @relation(fields: [attribute_id], references: [id])
   attribute_id Int
   value        Attribute_Value @relation(fields: [value_id], references: [id])
   value_id     Int

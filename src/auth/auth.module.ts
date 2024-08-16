@@ -13,7 +13,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     PassportModule,
     JwtModule.register({
       secret: 'city312adilet',
-      signOptions: { expiresIn: '5m' }
     }),
   ],
   controllers: [AuthController],

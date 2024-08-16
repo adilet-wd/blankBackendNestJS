@@ -11,14 +11,14 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @ApiOperation({summary: "Вход в аккаунт и получение JWT токена"})
-  @Post('login')
+  @Post('login/partner')
   @UseGuards(LocalGuard)
   async loginPartner(@Req() req: Request) {
     return req.user;
   }
 
   @ApiOperation({summary: "Получение информации о токене"})
-  @Get('status')
+  @Get('status/partner')
   @UseGuards(JwtGuard)
   async status(@Req() req: Request) {
     // console.log(req.user);
