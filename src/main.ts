@@ -2,14 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from './pipes/validation.pipe';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 
 async function bootstrap() {
   const PORT = process.env.Port || 5000;
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {cors: true});
 
   // Настройка сваггера
   const config = new DocumentBuilder()
-    .setTitle('City312  ')
+    .setTitle('brics  ')
     .setDescription('Документация REST API')
     .setVersion('1.0.0')
     .addTag('AdiletWD')

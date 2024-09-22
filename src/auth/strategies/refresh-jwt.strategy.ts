@@ -4,7 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class RefreshJwtStrategy extends PassportStrategy(Strategy, 'refresh-jwt') {
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -15,8 +15,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   validate(payload) {
     // Проверка на наличие роли в токене и является ли токен accessToken
-    if (payload.type != "accessToken" || !payload.role) {
-      throw new UnauthorizedException('Invalid accessToken payload');
+    if (payload.type != "refreshToken" || !payload.role) {
+      throw new UnauthorizedException('Invalid refreshToken');
     }
 
     return payload

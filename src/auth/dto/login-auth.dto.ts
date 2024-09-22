@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class LoginPartnerDto {
-    @ApiProperty({ example: "ADM", description: "Наименование бренда" })
-    @IsNotEmpty({ message: 'brand_name не должна быть пустым' })
-    @IsString({ message: "Должно быть строкой" })
-    brand_name: string;
+export class LoginUserDto {
+    @ApiProperty({ example: "AdiletWD", description: "Username" })
+    @IsNotEmpty({ message: 'username should not be empty' })
+    @IsString({ message: 'Username should be a string' })
+    readonly username: string;
 
-    @ApiProperty({ example: "eiwqei219", description: "Пароль" })
-    @IsNotEmpty({ message: 'password не должна быть пустым' })
-    @IsString({ message: "Должно быть строкой" })
-    password: string;
+    @ApiProperty({ example: "dfge2Fd234", description: "Password" })
+    @IsNotEmpty({ message: 'Password should not be empty' })
+    @IsString({message: "Password should be a string"})
+    readonly password: string;
 }
