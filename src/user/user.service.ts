@@ -32,7 +32,7 @@ export class UserService {
   */
   async getUserByUsername(username: string){
     const user = await this.prismaService.user.findUnique({where: {username: username}});
-    if (!user) throw new HttpException('Пользователь не найден', 404);
+    if (!user) throw new HttpException('User not found', 404);
     return user;
   }
 

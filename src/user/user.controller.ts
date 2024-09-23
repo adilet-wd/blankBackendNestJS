@@ -1,10 +1,11 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '../auth/guards/jwt.guard';
 import { Request } from 'express';
 import { TokenPayload } from '../auth/interfaces/token-payload.interface';
 
+@ApiTags("Users")
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {

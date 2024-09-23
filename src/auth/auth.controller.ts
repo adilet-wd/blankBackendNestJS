@@ -11,7 +11,7 @@ import { UserService } from '../user/user.service';
 import { CheckEmailDto } from './dto/check-email.dto';
 import { CheckUsernameDto } from './dto/check-username.dto';
 
-@ApiTags("Авторизация")
+@ApiTags("Auth")
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService, private userService: UserService) {}
