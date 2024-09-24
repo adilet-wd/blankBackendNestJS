@@ -58,4 +58,17 @@ export class PostService {
     return newPost;
   }
 
+  /**
+   * Увеличение количества просмотров поста
+   * @param id - id поста
+   * @returns {PostModel} - пост
+   */
+  async increaseViews(id: number){
+    const post = await this.getPost(id);
+    const updatedPost = await this.prismaService.post.update({
+      where: {id: post.id},
+      data: {views: post.views + 1},
+    });
+    return updatedPost
+  }
 }

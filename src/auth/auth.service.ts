@@ -59,7 +59,7 @@ export class AuthService {
    * */
   private async generateUserAccessToken(user: UserModel){
     const payload = {username: user.username, role: user.role, type: "accessToken" };
-    return this.jwtService.sign(payload, { expiresIn: '3m' });
+    return this.jwtService.sign(payload, { expiresIn: '15m' });
   }
 
   /**

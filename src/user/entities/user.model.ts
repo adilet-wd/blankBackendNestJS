@@ -6,6 +6,9 @@ export class UserModel {
   role?: string;
   surname?: string;
   name?: string;
+  rating?: number;
+  ratingCount?: number;
+  ratingAmount?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

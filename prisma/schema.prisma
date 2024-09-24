@@ -5,30 +5,54 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js";
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  email    String @unique
-  name     String
-  surname  String
-  role     String @default("user")
-  password String
-  Post     Post[]
+  id           Int         @id @default(autoincrement())
+  username     String      @unique
+  email        String      @unique
+  name         String
+  surname      String
+  role         String      @default("user")
+  password     String
+  Subscribe    Subscribe[]
+  rating       Float       @default(0)
+  ratingAmount Int         @default(0)
+  ratingSum    Int         @default(0)
+  posts        Post[]
 }
 
+model Group {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  users       User[]
+}
 model Post {
-  id          Int    @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   title       String
   author      String
   description String
-  owner       User   @relation(fields: [owner_id], references: [id])
+  owner       User        @relation(fields: [owner_id], references: [id])
   owner_id    Int
+  views       Int         @default(0)
+  Subscribe   Subscribe[]
+}
+
+model Subscribe {
+  id            Int    @id @default(autoincrement())
+  user          User   @relation(fields: [user_id], references: [id])
+  user_username String
+  user_id       Int
+  post          Post   @relation(fields: [post_id], references: [id])
+  post_id       Int
+  post_title    String
+
+  @@unique([user_id, post_id])
 }

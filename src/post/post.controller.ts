@@ -31,4 +31,9 @@ export class PostController {
     return this.postService.createPost(postDto, payload);
   }
 
+  @ApiOperation({summary: "Get post by id"})
+  @Post('/views/:id')
+  async increaseViews(@Param('id') id: number) {
+    return this.postService.increaseViews(id);
+  }
 }
