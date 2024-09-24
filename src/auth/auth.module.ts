@@ -8,6 +8,8 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserService } from '../user/user.service';
 import { RefreshJwtStrategy } from './strategies/refresh-jwt.strategy';
+import { GroupService } from '../post/group.service';
+import { SubscribeService } from '../subscribe/subscribe.service';
 
 @Module({
   imports: [
@@ -17,6 +19,7 @@ import { RefreshJwtStrategy } from './strategies/refresh-jwt.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService, PrismaService, LocalStrategy, JwtStrategy, RefreshJwtStrategy]
+  providers: [AuthService, UserService, PrismaService, LocalStrategy, JwtStrategy,
+    RefreshJwtStrategy, GroupService, SubscribeService]
 })
 export class AuthModule {}

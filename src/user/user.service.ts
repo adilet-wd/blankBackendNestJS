@@ -20,7 +20,7 @@ export class UserService {
         password: false,
         surname: true,
         name: true,
-        role: true,
+        rating: true,
       }
     });
   }
@@ -42,7 +42,31 @@ export class UserService {
    * @returns {UserModel}- Пользователь
   */
   async getUserByToken(payload: TokenPayload){
-    const user = await this.getUserByUsername(payload.username);
+    const user = await this.prismaService.user.findUnique(
+      {where: {username: payload.username},
+        select: {
+          username: true,
+          email: true,
+          name: true,
+          surname: true,
+          rating: true,
+        }});
+    if (!user) throw new HttpException('User not found', 404);
+    const userSubscribe = await this.prismaService.user.findUnique({
+      where: {username: payload.username },
+      include: {Subscribe: {
+          select: {
+            group_id: true,
+            group_title: true
+          }
+        }}
+    } );
+    const userTasks = await this.prismaService.user.findUnique({
+      where: {username: payload.username },
+      include: {tasks: true}
+    } );
+    user["Subscribe"] = userSubscribe["Subscribe"];
+    user["tasks"] = userTasks["tasks"];
     return user;
   }
 

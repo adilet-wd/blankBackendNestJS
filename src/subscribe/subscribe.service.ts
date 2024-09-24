@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { TokenPayload } from '../auth/interfaces/token-payload.interface';
 import { SubscribeModel } from './entities/subscribe.model';
 import { UserService } from '../user/user.service';
-import { PostService } from '../post/post.service';
+import { GroupService } from '../post/group.service';
 import { PrismaService } from '../prisma.service';
 
 
@@ -11,16 +11,16 @@ export class SubscribeService {
 
   constructor(private userService: UserService,
               private prismaService: PrismaService,
-              private postService: PostService) {
+              private groupService: GroupService) {
   }
 
   /**
-   * Получение всех подписчиков поста
-   * @param id - айди поста
+   * Получение всех подписчиков группы
+   * @param id - айди группы
    * @returns {"user_username"}- массив пользователей
    */
-  async getPostSubscribes(id: number) {
-    const post = await this.prismaService.post.findUnique({
+  async getGroupSubscribes(id: number) {
+    const post = await this.prismaService.group.findUnique({
       where: {id: Number(id) },
       include: {Subscribe: {
         select: {
@@ -33,17 +33,17 @@ export class SubscribeService {
   }
 
   /**
-   * Получение всех постов на которые подписан юзер
-   * @param id - айди поста
-   * @returns массив посотв
+   * Получение всех групп на которые подписан юзер
+   * @param id - айди группы
+   * @returns массив групп
    */
   async getUserSubscribtions(tokenData: TokenPayload) {
     const user = await this.prismaService.user.findUnique({
       where: {username: tokenData.username },
       include: {Subscribe: {
         select: {
-          post_id: true,
-          post_title: true
+          group_id: true,
+          group_title: true
         }
         }}
     } );
@@ -52,20 +52,20 @@ export class SubscribeService {
   }
 
   /**
-   * Подписка на пост
-   * @param postId - айди поста
+   * Подписка в группу
+   * @param groupId - айди группы
    * @param tokenData - данные токена
    * @returns {SubscribeModel} - подписка
    */
-  async createSubscribe(postId: number, tokenData: TokenPayload):Promise<SubscribeModel> {
+  async createSubscribe(groupId: number, tokenData: TokenPayload):Promise<SubscribeModel> {
     const user = await this.userService.getUserByUsername(tokenData.username);
-    const post = await this.postService.getPost(postId);
+    const group = await this.groupService.getGroup(groupId);
     // Check if the subscription already exists
     const existingSubscribe = await this.prismaService.subscribe.findUnique({
       where: {
-        user_id_post_id: {
+        user_id_group_id: {
           user_id: user.id,
-          post_id: post.id,
+          group_id: group.id,
         },
       },
     });
@@ -78,8 +78,8 @@ export class SubscribeService {
       data: {
         user_id: user.id,
         user_username: user.username,
-        post_id: post.id,
-        post_title: post.title
+        group_id: group.id,
+        group_title: group.title
       },
     });
     return newSubscribe;
@@ -87,19 +87,19 @@ export class SubscribeService {
 
 
   /**
-   * Отписка от поста на пост
-   * @param postId - айди поста
+   * Отписка от группы
+   * @param groupId - айди группы
    * @param tokenData - данные токена
    */
-  async deleteSubscribe(postId: number, tokenData: TokenPayload) {
+  async deleteSubscribe(groupId: number, tokenData: TokenPayload) {
     const user = await this.userService.getUserByUsername(tokenData.username);
-    const post = await this.postService.getPost(postId);
+    const post = await this.groupService.getGroup(groupId);
     // Check if the subscription exists
     const existingSubscribe = await this.prismaService.subscribe.findUnique({
       where: {
-        user_id_post_id: {
+        user_id_group_id: {
           user_id: user.id,
-          post_id: post.id,
+          group_id: post.id,
         },
       },
     });

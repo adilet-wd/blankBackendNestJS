@@ -6,7 +6,7 @@ import { Request } from 'express';
 import { TokenPayload } from '../auth/interfaces/token-payload.interface';
 
 @ApiTags("Users")
-@Controller('user')
+@Controller('/api/user')
 export class UserController {
   constructor(private userService: UserService) {
   }

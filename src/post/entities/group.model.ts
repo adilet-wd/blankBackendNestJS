@@ -1,4 +1,4 @@
-export class PostModel {
+export class GroupModel {
   id?: number;
   title: string;
   author: string;

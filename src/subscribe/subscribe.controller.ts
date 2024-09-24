@@ -6,17 +6,17 @@ import { TokenPayload } from '../auth/interfaces/token-payload.interface';
 import { SubscribeService } from './subscribe.service';
 
 @ApiTags('Subscribe')
-@Controller('subscribe')
+@Controller('/api/subscribe')
 export class SubscribeController {
   constructor(private subscribeService: SubscribeService) {}
 
   @ApiOperation({summary: "Get all subscribes"})
-  @Get('/post/:id')
-  async getPostSubscribes(@Param('id') id: number) {
-    return this.subscribeService.getPostSubscribes(id);
+  @Get('/group/:id')
+  async getGroupSubscribes(@Param('id') id: number) {
+    return this.subscribeService.getGroupSubscribes(id);
   }
 
-  @ApiOperation({summary: "Subscribe to post"})
+  @ApiOperation({summary: "Subscribe to group"})
   @Get('/user')
   @UseGuards(JwtGuard)
   async getUserSubscriptions(@Req() req: Request) {
@@ -24,7 +24,7 @@ export class SubscribeController {
     return this.subscribeService.getUserSubscribtions(payload);
   }
 
-  @ApiOperation({summary: "Subscribe to post"})
+  @ApiOperation({summary: "Subscribe to group"})
   @Post('/:id')
   @UseGuards(JwtGuard)
   async createSubscribe(@Param('id') id: number, @Req() req: Request) {
@@ -32,7 +32,7 @@ export class SubscribeController {
     return this.subscribeService.createSubscribe(id, payload);
   }
 
-  @ApiOperation({summary: "Unsubscribe from post"})
+  @ApiOperation({summary: "Unsubscribe from group"})
   @Delete('/:id')
   @UseGuards(JwtGuard)
   async deleteSubscribe(@Param('id') id: number, @Req() req: Request) {

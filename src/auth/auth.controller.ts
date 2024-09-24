@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
 import { Request } from 'express';
@@ -12,7 +12,7 @@ import { CheckEmailDto } from './dto/check-email.dto';
 import { CheckUsernameDto } from './dto/check-username.dto';
 
 @ApiTags("Auth")
-@Controller('auth')
+@Controller('/api/auth')
 export class AuthController {
   constructor(private authService: AuthService, private userService: UserService) {}
 
@@ -21,6 +21,12 @@ export class AuthController {
   @UseGuards(LocalGuard)
   async loginPartner(@Body() userDto: LoginUserDto, @Req() req: Request) {
     return req.user;
+  }
+
+  @ApiOperation({summary: "Register to group"})
+  @Post('/register/:id')
+  registerToGroup(@Param('id') id: number, @Body() userDto: CreateUserDto){
+    return this.authService.registerToGroup(userDto, id);
   }
 
   @ApiOperation({summary: "Register"})

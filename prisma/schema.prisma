@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js";
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -21,20 +21,15 @@ model User {
   surname      String
   role         String      @default("user")
   password     String
-  Subscribe    Subscribe[]
   rating       Float       @default(0)
   ratingAmount Int         @default(0)
   ratingSum    Int         @default(0)
-  posts        Post[]
+  Subscribe    Subscribe[]
+  group        Group[]
+  tasks        Task[]
 }
 
 model Group {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String
-  users       User[]
-}
-model Post {
   id          Int         @id @default(autoincrement())
   title       String
   author      String
@@ -43,6 +38,7 @@ model Post {
   owner_id    Int
   views       Int         @default(0)
   Subscribe   Subscribe[]
+  task        Task[]
 }
 
 model Subscribe {
@@ -50,9 +46,21 @@ model Subscribe {
   user          User   @relation(fields: [user_id], references: [id])
   user_username String
   user_id       Int
-  post          Post   @relation(fields: [post_id], references: [id])
-  post_id       Int
-  post_title    String
+  group         Group  @relation(fields: [group_id], references: [id])
+  group_id      Int
+  group_title   String
 
-  @@unique([user_id, post_id])
+  @@unique([user_id, group_id])
+}
+
+model Task {
+  id            Int     @id @default(autoincrement())
+  title         String
+  description   String
+  group         Group   @relation(fields: [group_id], references: [id])
+  group_id      Int
+  group_title   String
+  users         User[]
+  completed     Boolean @default(false)
+  complete_user String  @default("")
 }

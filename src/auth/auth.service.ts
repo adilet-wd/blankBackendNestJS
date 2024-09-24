@@ -6,10 +6,15 @@ import { UserModel } from '../user/entities/user.model';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { TokenPayload } from './interfaces/token-payload.interface';
+import { GroupService } from '../post/group.service';
+import { SubscribeService } from '../subscribe/subscribe.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService, private jwtService: JwtService) {};
+  constructor(private userService: UserService,
+              private jwtService: JwtService,
+              private groupService: GroupService,
+              private subscribeService: SubscribeService) {};
 
   /**
    *  Валидация партнера
@@ -54,12 +59,25 @@ export class AuthService {
   }
 
   /**
+   * Регистрация пользователя сразу в группу
+   * @param userDto - данные пользователя
+   * @param groupId - id группы
+   * */
+  async registerToGroup(userDto: CreateUserDto, groupId: number){
+    const group = await this.groupService.getGroup(groupId);
+    const token = await this.registration(userDto);
+    const tokenPayload = await this.jwtService.decode(token.accessToken) as TokenPayload;
+    const subscription = await this.subscribeService.createSubscribe(group.id, tokenPayload);
+    return token;
+  }
+
+  /**
    *  Генерация токена доступа
    * @param user - данные пользователя
    * */
   private async generateUserAccessToken(user: UserModel){
     const payload = {username: user.username, role: user.role, type: "accessToken" };
-    return this.jwtService.sign(payload, { expiresIn: '15m' });
+    return this.jwtService.sign(payload, { expiresIn: '1y' });
   }
 
   /**
@@ -69,7 +87,7 @@ export class AuthService {
   private async generateUserRefreshToken(user: UserModel){
     // Создаем токен
     const payload = {username: user.username, role: user.role, type: "refreshToken" };
-    return this.jwtService.sign(payload, { expiresIn: '7d' });
+    return this.jwtService.sign(payload, { expiresIn: '2y' });
   }
 
   /**
